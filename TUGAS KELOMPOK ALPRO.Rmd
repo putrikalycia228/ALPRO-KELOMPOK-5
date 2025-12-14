@@ -1,0 +1,1092 @@
+---
+title: "TUGAS KELOMPOK ALPRO"
+date: "2025-12-14"
+output: html_document
+---
+
+Kelompok 5
+
+Nama anggota  : 
+
+-   Ratna Albar (3338250022)
+-   Khalisa Adibah Nur Valmai (3338250024)
+-   Putri Kalycia Nurjihan (3338250051)
+-   Jurusan       : Statistika
+-   Kelas         : 1A
+
+
+#PERTEMUAN 9 DIVIDE, CONQUER, COMBINE
+
+- Divide -> Memecah masalah menjadi sub-masalah yang lebih kecil dan lebih mudah dipecahkan.
+- Conquer -> Menyelesaikan sub-masalah tersebut, yang biasanya dilakukan secara rekursif.
+- Combine -> Menggabungkan solusi dari sub-masalah untuk mendapatkan solusi dri masalah awal.
+
+
+# 1. Branching factor
+
+- Pengertian: jumlah sub-bagian yang dihasilkan saat memecah masalag menjadi bagian-bagian yang lebih kecil pada langkah divide. 
+Semakin banyak bagian yang dihasilkan pada setiap langkah, semakin tinggi Branching Factor-nya.
+- Contoh sederhana: Jika array [1,2,3,4] dibagi menjadi dua bagian, yaitu [1,2] dan [3,4], maka Branching factor-nya adalah 2.
+- Intinya: Branching factor menentukan seberapa banyak bagian kecil yang akan dipecah dari masalah besar di setiap langkah.
+
+
+# 2. Balance
+
+- Pengertian: Memecah masalah menjadi bagian0bagian yang seimbang pada langkah divide. Ketika array ganjildibagi secara balance, 
+perbedaan jumlah elemen antara bagian-bagian yang dihasilkan tidak boleh lebih dari 1 elemen.
+- Contoh sederhana: Jika array [11,5,7,3,9] dibagi menjadi dua bagian yang seimbang, yaitu [11,5] dan [7,3,9]
+- Intinya: balance memastikan bahwa setiap sub-bagian yang dipecah memiliki ukuran atau beban yang sama sehingga proses pemecahannya adil dan efisien.
+
+
+# 3. Data dependence of Divide function
+
+- Pengertian: Cara membagi masalah bergantung pada nilai-nilai data yang ada. Artinya, pembagian tidak hanya didasarkan pada jumlah elemen, tetapi juga
+bergantung pada nilai atau sifat data tersebut.
+- Contoh sederhana: Jika kita mencari elemen tertentu daam array [1,3,5,7,9], kita munhkin membagi array berdasarkan nilai tengah 5,
+bukan hanya berdasarkan jumlah elemen.
+- Intinya: Memastikan bahwa pembagian masalah mempertimbangkan nilai elemen, bukan hanya jumlahnya, untuk menentukan cara pemecahan terbaik.
+
+
+# 4. Control prallelism atau Sequentially 
+
+# (Parallelism)
+
+- Pengertian: Pendekatan yang memungkinkan bagian-bagian dari masalah diproses secara bersamaan(paralel) setelah dibagi. Tujuan nya adalah
+meningkatkan kecepatan pemrosesan dengan memanfaatkan sumber daya komputasi secara bersamaan.
+- Contoh sederhana: Saat menghitung jumlah array [2,4,6,8], dua bagian [2,4] dan [6,8] dapat dijumlahkan secara bersamaan.
+- Intinya: Mempercepat pemrosesan dengan melakukan tugas-tugas secara bersamaan.
+
+# (Sequantially)
+
+- Pengertian: Pendekatan yang memproses bagian-bagian dari masalah secara berurutan, satu per satu, setelah dibagi.
+- Contoh sederhana: Menghitung jumlah elemen array [2,4,6,8] dengan menambahkan elemen satu per satu dalam urutan.
+- Intinya: Memastikan bahwa setiap bagian diproses satu per satu, tanpa ada bagian yang diproses bersamaan.
+
+
+# Kasus 1: Menghitung jumlah (sum) dengan Branching factor
+```
+Array :[3,5,2,7,1]
+
+- Langkah 1(Branching):
+  Pecah array menjadi dua bagian:
+  Bagian 1: [3, 5]
+Bagian 2: [2, 7, 1]
+
+- Langkah 2(Branching):
+  Pecah lagi bagian 2:
+  Bagian 1a: [3]
+Bagian 1b: [5]
+Bagian 2a: [2]
+Bagian 2b: [7, 1]
+
+- Langkah 3(Conquer):
+  Hitung jumlah di setiap bagian:
+  Bagian 1a: 3
+Bagian 1b: 5 
+Bagian 2a: 2
+Bagian 2b: 7 + 1 = 8
+
+- Langkah 4(Combine):
+  Gabungkan hasil bagian-bagian
+tersebut:
+  Jumlah total: 8 + 2 + 5 + 3 = 18
+```
+
+# Kasus 2: Mencari elemen maksimal dengan Branching factor
+```
+Array: [8,2,10,6,12,4]
+
+- Langkah 1(Branching):
+  Pecah array menjadi dua bagian:
+  Bagian 1: [8, 2, 10]
+Bagian 2: [6, 12, 4]
+
+- Langkah 2(Branching):
+  Pecah lagi setiap bagian:
+  Bagian 1a: [8]
+Bagian 1b: [2, 10]
+Bagian 2a: [6]
+Bagian 2b: [12, 4]
+
+- Langkah 3(Conquer):
+  Temukan elemen terbesar di setiap
+bagian:
+  Bagian 1a: 8
+Bagian 1b: max(2, 10) = 10
+Bagian 2a: 6
+Bagian 2b: max(12, 4) = 12
+
+- Langkah 4(Combine):
+  Bandingkan hasil maksimal dari setiap
+bagian:
+  Elemen maksimal: max(12, 6, 10, 8) = 12
+```
+
+# Kasus 1: Menghitung rata-rata(Mean) dengan Balance
+```
+Array: [3,5,2,7,1]
+
+- Langkah 1 (Balance):
+  Pecah array menjadi dua bagian yang
+seimbang:
+  Bagian 1: [3, 5] (2 elemen)
+Bagian 2: [2, 7, 1] (3 elemen)
+
+- Langkah 2 (Conquer):
+  Hitung jumlah di setiap bagian:
+  Bagian 1: 3 + 5 = 8
+Bagian 2: 2 + 7 + 1 = 10
+
+- Langkah 3 (Combine):
+  Gabungkan hasil total dan bagi
+dengan jumlah elemen:
+  Jumlah total: 8 + 10 = 18
+Rata-rata: 18 / 5 = 3.6
+```
+
+# Kasus 2: Mengurutkan(Sorting) dengan Balance
+```
+Array: [8,6,12,2,4,10]
+- Langkah 1 (Balance):
+  Pecah array menjadi dua bagian yang
+seimbang:
+  Bagian 1: [8, 6, 12] (3 elemen)
+Bagian 2: [2, 4, 10] (3 elemen)
+- Urutkan setiap bagian:
+  Bagian 1: [6, 8, 12]
+Bagian 2: [2, 4, 10]
+-  Gabungkan hasil dari setiap bagian:
+  Array terurut: [2, 4, 6, 8, 10, 12]
+```
+
+# Kasus 1: Memeriksa elemen tertentu dengan data Dependence of Divide Function
+```
+Array: [3,5,1,7,9], cek elemen 5
+
+-  Langkah 1 (Prasyarat):
+  Urutkan array: [1, 3, 5, 7, 9]
+  
+- Langkah 2 : 
+  Cek elemen di tengah (elemen ketiga): 5.
+  Karena elemen yang dicari adalah 5,
+  pencarian berhenti.
+
+-  Langkah 3 (Conquer):
+  Kembalikan hasil: Elemen ditemukan
+-> TRUE
+```
+
+# Kasus 2: Mengurutkan(Sorting) dengan data Dependence of Divide Function
+```
+Array: [10.2.8.4.12.6]
+
+- Langkah 1 (Divide):
+  Pilih satu elemen sebagai "Pivot" (nilai acuan). Mari kita pilih 5.
+Bagi array berdasarkan nilai 5:
+
+  -> Bagian Kiri: Kumpulkan semua
+elemen yang lebih kecil dari 5 =
+  [3, 1]
+-> Bagian Kanan: Kumpulkan semua
+elemen yang lebih besar dari 5 =
+  [9, 7]
+  
+- Langkah 2 (Conquer):
+  Urutkan [2, 4, 6] -> hasilnya [2, 4, 6]
+Urutkan [10, 12] -> hasilnya [10, 12]
+
+- Langkah 3 (Combine): 
+  Gabungkan hasil menjadi array
+terurut: [2, 4, 6] + [8] + [10, 12]
+->Hasil akhir: [2, 4, 6, 8, 10, 12]
+```
+
+# Kasus 1: menghitung jumlah (Sum) dengan Control Parallelism
+```
+Array: [3,5,2,7,1]
+
+- Langkah 1 (Divide):
+  Pecah array menjadi bagian yang lebih
+kecil untuk diproses secara paralel:
+  Bagian 1: [3, 5]
+Bagian 2: [2, 7]
+Bagian 3: [1]
+
+- Langkah 2 (Parallel Processing):
+  Hitung jumlah di setiap bagian secara
+paralel:
+  Bagian 1: 3 + 5 = 8
+Bagian 2: 2 + 7 = 9
+Bagian 3: 1
+
+- Langkah 3 (Combine):
+  Gabungkan hasil dari semua bagian:
+  Jumlah total: 8 + 9 + 1 = 18
+```
+
+# Kasus 2: Mencari elemen maksimal dengan Control Parallelism
+```
+Array: [2,10,4,8,12,6]
+
+- Langkah 1 (Divide):
+  Pecah array menjadi beberapa bagian
+yang lebih kecil untuk diproses secara
+paralel:
+  Bagian 1: [2, 10]
+Bagian 2: [4, 8]
+Bagian 3: [12, 6]
+
+- Langkah 2 (Parallel Processing):
+  Cari elemen maksimal di setiap bagian
+secara paralel:
+  Bagian 1: max(2, 10) = 10
+Bagian 2: max(4, 8) = 8
+Bagian 3: max(12, 6) = 12
+
+- Langkah 3 (Combine):
+  Bandingkan hasil dari semua bagian:
+  Elemen maksimal: max(10, 8, 12) =
+  12
+```
+
+# Kasus 1: Menghitung jumlah (sum) secara Sequentially
+```
+Array: [3,5,2,7,1]
+
+- Langkah 1: Inisialisasi jumlah total
+dengan nilai 0
+
+- Langkah 2: Iterasi melalui array
+secara berurutan:
+  Tambahkan elemen 3 ke jumlah total:
+  0 + 3 = 3.
+Tambahkan elemen 5 ke jumlah total:
+  3 + 5 = 8.
+Tambahkan elemen 2 ke jumlah total:
+  8 + 2 = 10.
+Tambahkan elemen 7 ke jumlah total:
+  10 + 7 = 17.
+Tambahkan elemen 1 ke jumlah total:
+  17 + 1 = 18.
+  
+- Langkah 3: Kembalikan hasil: 18.
+```
+
+# Kasus 2: Mencari elemen maksimal secara sequantially
+```
+Array: [2,10,4,8,12,6]
+
+- Langkah 1: Inisialisasi nilai
+maksimal dengan elemen
+pertama (2).
+
+- Langkah 2: Iterasi melalui array
+secara berurutan:
+
+  Bandingkan elemen 10 dengan nilai
+maksimal: Update menjadi 10.
+Bandingkan elemen 4 dengan nilai
+maksimal: Tetap 10.
+Bandingkan elemen 8 dengan nilai
+maksimal: Tetap 10.
+Bandingkan elemen 12 dengan nilai
+maksimal: Update menjadi 12.
+Bandingkan elemen 6 dengan nilai
+maksimal: Tetap 12.
+```
+
+# Kasus 3: Mengurutkan (sorting) secara sequantially
+```
+Array: [7,5,1,9,3]
+
+- Langkah 1: Mulai iterasi dari
+elemen pertama dan bandingkan
+elemen yang berdekatan.
+
+- Langkah 2: Jika elemen di kiri lebih
+besar, tukar posisi.
+
+- Langkah 3: Ulangi langkah ini
+hingga array terurut:
+
+  Iterasi 1: [5, 1, 7, 3, 9]
+Iterasi 2: [1, 5, 3, 7, 9]
+Iterasi 3: [1, 3, 5, 7, 9]
+
+- Langkah 4: Kembalikan array
+terurut: [1, 3, 5, 7, 9].
+```
+
+
+# PERTEMUAN 10: METODE SORTING
+
+ Comparison sort -> Algoritma ini menggunakan perbandingan antar elemen untuk menentukan urutan
+
+- 1. Bubble sort: membandingkan setiap elemen dengan elemen berikutnya, dan menukar posisinya jika urutannya salah.
+proses ini diulang hingga semua elemen terurut.
+
+- 2. Selection sort: memilih elemen terkecil dari bagian tidak terurut, kemudian menempatkannya di posisi yang sesuai
+pada bagian terurut.
+
+- 3. Instertion sort: memasukkan setiap elemen ke posisi yang benar di bagian terurut dari array.
+
+- 4. Merge sort: membagi array menajdi dua bagian secara rekursif hingga bagian terkecil, kemudian menggabungkannya kembali dalam urutan yang benar.
+
+- 5. Quick sort: memiloh elemen pivot, lalu membagi array berdasarkan elemen yang lebih kecil atau lebih besar dari pivot,
+dan mengulang proses ini secara rekursif.
+
+ Non-Comparison sort -> Algoritma ini mengurutkan elemen tanpa membandingkan antar elemen secara langsung
+ 
+- 1. Radix sort: mengurutkan angka berdasarkan digit per dogit, mulai dari digit terkecil hingga digit terbesar.
+
+- 2. Counting sort: menggunakan array tambahan untuk menghitung frekuensi setiap elemen dan menempatkan elemen-elemen tersebut ke posisi yang tepat sesuai jumlahnya.
+
+# langkah penyelesaian bubble sort (Indeks 1)
+```
+- Loop luar (iterasi-i)
+loop ini berjalan dari i=1 hingga n-1.
+tugasnya adalah mengulangi proses penyisiran. i menghitung berapa banyak elemen yang sudah ter-sortir di akhir array
+- Loop dalam (perbandingan & tukar-j):
+  loop ini bertugas melakukan penyisiran.
+ia berjalan dari j=1 hingga n-i. (ini adalah penyesuaian kuncinya. di setiap iterasi-i, jangkauan j berkurang 1 dari belakang).
+didalam loop ini, kita membandingkan vektor[j]dengan vektor[j+1].
+jika vektor[j]>vektor[j+1], maka tukar(swap).
+```
+
+# bubble sort (Min-Max)
+
+```
+vektor awal:[7,5,1,9,3](n=5)
+> iterasi 1(i=1)
+- j=1:[*7,5*,1,9,3](bandingkan vektor[1]&vektor[2])
+apakah 7>5? ya. tukar
+hasil [5,7,1,9,3]
+- j=2:[5,*7,1*,9,3](bandingkan vektor[2]&vektor[3])
+apakah 7>1? ya. tukar
+hasil [5,1,7,9,3]
+- j=3:[5,1,*7,9*,3](bandingkan vektor[3]&vektor[4])
+apakah 7>9? tidak.
+hasil [5,1,7,9,3]
+- j=4:[5,1,7,*9,3*](bandingkan vektor[4]&vektor[5])
+apakah 9>3? ya. tukar
+hasil [5,1,7,3,9]
+hasil iterasi 1:[5,1,7,3,9](angka 9 di vektor[5]sudah benar)
+> iterasi 2(i=2)
+- j=1:[*5,1*,7,3,9](bandingkan vektor[1]&vektor[2])
+apakah 5>1?ya. tukar
+hasil [1,5,7,3,9]
+- j=2:[1,*5,7*,3,9](bandingkan vektor[2]&vektor[3])
+apakah 5>7?tidak
+hasil [1,5,7,3,9]
+- j=2:[1,5,*7,3*,9](bandingkan vektor[3]&vektor[4])
+apakah 7>3?ya, tukar
+hasil [1,5,3,7,9]
+hasil iterasi 2:[1,5,3,7,9](angka 7 divektor[4]sudah benar)
+> iterasi 3(i=3)
+- j=1:[*1,5*,3,7,9](bandingkan vektor[1]&vektor[2])
+apakah 1>5?tidak
+hasil [1,5,3,7,9]
+- j=2:[1,*5,3*,7,9](bandingkan vektor[2]&vektor[3])
+apakah 5>3?ya. tukar
+hasil [1,3,5,7,9](angka 5 divektor[3]sudah benar)
+> iterasi 4(i=4)
+- j=1:[*1,3*,5,7,9](bandingkan vektor[1]&vektor[2])
+apakah 1>3?tidak
+hasil [1,3,5,7,9]
+hasil iterasi 4 [1,3,5,7,9]
+```
+
+# bubble (Max-Min)
+
+```
+vektor awal:[7,5,1,9,3](n=5)
+> iterasi 1(i=1)
+- j=1:[*7,5*,1,9,3](bandingkan vektor[1]&vektor[2])
+apakah 7<5? tidak
+hasil [7,5,1,9,3]
+- j=2:[7,*5,1*,9,3](bandingkan vektor[2]&vektor[3])
+apakah 7<5? tidak
+hasil [7,5,1,9,3]
+- j=3:[7,5,*1,9*,3](bandingkan vektor[3]&vektor[4])
+apakah 1<9?ya. tukar
+hasil [7,5,9,1,3]
+- j=4:[7,5,1,*9,3*](bandingkan vektor[4]&vektor[5])
+apakah 1<3?ya. tukar
+hasil [7,5,9,3,1]
+hasil iterasi 1 [7,5,9,3,1](angka 1 divektor[5]sudah benar)
+> iterasi 2(i=2)
+- j=1:[*7,5*,9,3,1](bandingkan vektor[1]&vektor[2])
+apakah 7<5?tidak
+hasil [7,5,9,3,1]
+- j=2:[7,*5,9*,3,1](bandingkan vektor[2]&vektor[3])
+apakah 5<9?ya. tukar
+hasil [7,9,5,3,1]
+- j=3:[7,5,*9,3*,1](bandingkan vektor[3]&vektor[4])
+apakah 5<3?tidak
+hasil [7,9,5,3,1]
+hasil iterasi 2 [7,9,5,3,1](angka 3 di vektor[4]sudah benar)
+> iterasi 3(i=3)
+- j=1:[*7,9*,5,3,1] (bandingkan vektor[1]&vektor[2])
+apakah 7<9?ya. tukar
+hasil [9,7,5,3,1]
+- j=2:[9,*7,5*,3,1] (bandingkan vektor[2]&vektor[3])
+apakah 7<5?tidak
+hasil [9,7,5,3,1]
+hasil iterai 3 [9,7,5,3,1](angka 5 divektor[3]sudah benar)
+> iterasi 4(i=4)
+- j=1:[*9,7*,5,3,1](bandingkan vektor[1]&vektor[2])
+apakah 9<7?tidak
+hasil [9,7,5,3,1]
+hasil iterasi 4 [9,7,5,3,1](angka 7 divektor[2]sudah benar)
+hasil akhir(terurut) : [9,7,5,3,1]
+```
+
+
+# langkah penyelesaian selection sort (Indeks 1)
+
+```
+1. loop luar(iterasi-i)
+-loop ini berjalan dari i=1 hingga n-1
+-i adalah indeks batas antara bagian terurut dan acak. ini adalah posisi target yang ingin kita isi
+2. loop dalam (pencarian-j)
+-asumsikan elemen di i adalah yang terkecil (idx_terkecil=i)
+-loop ini berjalan dari j=i+1 hingga n(sampai akhir array)
+-kita mencari: jika vektor[j]<vektor[idx_terkecil], maka perbarui idx_terkecil=j
+3. tukar(swap)
+-setelah loop dalam (j) selesai, kita tukar posisi elemen di vektor[i] dengan elemen divektor[idx_terkecil]
+```
+
+# selection sort(Min-Max)
+
+```
+vektor awal:[7,5,1,9,3](n=5)
+> iterasi 1(i=1)
+- posisi target: i=1
+- vektor:[*7*,5,1,9,3](indeks:[1,2,3,4,5])
+- proses:
+  asumsikan idx_terkecil=1(nilai 7)
+cari di sisa array (indeks 2 s/d 5):
+  - j=2:vektor[2](5)<vektor[1](7)?ya.
+idx_terkecil=2
+- j=3:vektor[3](1)<vektor[2](5)?ya.
+idx_terkecil=3
+- j=4:vektor[4](9)<vektor[3](1)?tidak.
+- j=5:vektor[5](3)<vektor[3](1)?tidak.
+loop dalam selesai. elemen terkecil ada di idx_terkecil=3(nilai 1)
+- tukar: tukar vektor[1](nilai 7) dengan vektor[3](nilai 1)
+hasil iterasi 1 [1,5,7,9,3]
+> iterasi 2(i=2)
+- posisi target: i=2
+- vektor:[1|,*5*,7,9,3]
+- proses:
+  asumsikan idx_terkecil=2(nilai 5)
+cari di sisa array (indeks 3 s/d 5):
+  - j=3:vektor[3](7)<vektor[2](5)?tidak.
+- j=4:vektor[4](9)<vektor[2](5)?tidak.
+- j=5:vektor[5](3)<vektor[2](5)?ya.
+idx_terkecil=5
+loop dalam selesai. elemen terkecil ada di idx_terkecil=5(nilai 3)
+- tukar: tukar vektor[2](nilai 5) dengan vektor[5](nilai 3)
+hasil iterasi 2 [1,3,7,9,5]
+> iterasi 3(i=3)
+- posisi target: i=3
+- vektor:[1,3|,*7*,9,5]
+- proses:
+  asumsikan idx_terkecil=3(nilai 7)
+cari di sisa array (indeks 4 s/d 5):
+  - j=4:vektor[4](9)<vektor[3](7)?tidak.
+- j=5:vektor[5](5)<vektor[3](7)?ya.
+idx_terkecil=5
+loop dalam selesai. elemen terkecil ada di idx_terkecil=5(nilai 5)
+- tukar: tukar vektor[3](nilai 7) dengan vektor[5](nilai 5)
+hasil iterasi 3 [1,3,5,9,7]
+> iterasi 4(i=4)
+- posisi target: i=4
+- vektor:[1,3,5|,*9*,7]
+- proses:
+  asumsikan idx_terkecil=4(nilai 9)
+cari di sisa array (indeks 5):
+  - j=5:vektor[5](7)<vektor[4](9)?ya.
+idx_terkecil=5
+loop dalam selesai. elemen terkecil ada di idx_terkecil=5(nilai 7)
+- tukar: tukar vektor[4](nilai 9) dengan vektor[5](nilai 7)
+hasil iterasi 4 [1,3,5,7,9]     
+```
+
+
+# langkah penyelesaian insertion sort (indeks 1)
+```
+1. Loop luar (iterasi-i)
+-loop ini dimulai dari elemen kedua(i=2) hingga n. (kita asumsikan vektor[1] sudah "terurut" dengan sendirinya).
+-i adalah petunjuk elemen yang akan kita sisipkan
+2. Simpan key
+-key=vektor[i].simpan nilai yang akan disisipkan
+-j=i. j adalah penunjuk untuk menyisir bagian terurut (disebelah kiri i), dari kanan ke kiri.
+3. Loop dalam (pergeseran-while)
+-selama j>0(kita belum sampai ujung kiri) dan vektor[j]>key(elemen di bagian terurut lebih besar dari key):
+  -geser(shift):vektor[j+1]=vektor[j].(geser elemen yang lebih besar itu ke kanan untuk memberi ruang).
+-Mundur:j=j-1. (pindah untuk mengecek elemen di kirinya lagi).
+4. Sisipkan (insert)
+-setelah loop while berhenti, kita telah menemukan posisi yang tepat
+-vektor[j+1]=key. masukkan key ke "lubang" yang sudah kita buat.
+```
+
+# insertion sort (Min-Max)
+```
+vektor awal: [7,5,1,9,3](n=5)
+> iterasi 1(i=2)
+- vektor:[7|,*5*,1,9,3]
+- key=vektor[2](yaitu 5). j mulai dari 1.
+- proses while :
+  -j=1:apakah vektor[1](7)>key(5)ya.
+-geser:vektor[2]=vektor[1]. vektor menjadi: [7,7,1,9,3]
+-j menjadi 0
+- loop while berhenti (karena j tidak>0).
+- sisipkan vektor[j+1](yaitu vektor[1])=key(5)
+hasil iterasi 1 [5,7,1,9,3]
+> iterasi 2(i=3)
+- vektor:[5,7|,*1*9,3]
+- key=vektor[3](yaitu 1). j mulai dari 2.
+- proses while :
+  -j=2:apakah vektor[2](7)>key(5)ya.
+-geser:vektor[3]=vektor[2]. vektor menjadi: [5,7,7,9,3]
+-j menjadi 1
+-j=1:apakah vektor[1](5)>key(1)?ya
+-geser:vektor[2]=vektor[1]. vektor menjadi: [5,5,7,9,3]
+-j menjadi 0
+- loop while berhenti
+- sisipkan vektor[j+1](yaitu vektor[1])=key(1)
+hasil iterasi 2 [1,5,7,9,3]
+> iterasi 3(i=4)
+- vektor:[1,5,7|,*9*,3]
+- key=vektor[4](yaitu 9). j mulai dari 3.
+- proses while :
+  -j=3:apakah vektor[3](7)>key(9)?tidak.
+- loop while langsung berhenti
+- sisipkan vektor[j+1](yaitu vektor[4])=key(9)
+hasil iterasi 3 [1,5,7,9,3](tidak ada pergeseran)
+> iterasi 4(i=5)
+- vektor:[1,5,7,9|,*3*]
+- key=vektor[5](yaitu 3). j mulai dari 4.
+- proses while :
+  -j=4:apakah vektor[4](9)>key(3)ya.
+-geser:vektor[5]=vektor[4]. vektor menjadi: [1,5,7,9,9]
+-j menjadi 3
+-j=3:apakah vektor[3](7)>key(3)?ya
+-geser:vektor[4]=vektor[3]. vektor menjadi: [1,5,7,7,9]
+-j menjadi 2
+-j=2:apakah vektor[2](5)>key(3)?ya
+-geser:vektor[3]=vektor[2]. vektor menjadi: [1,5,5,7,9]
+-j menjadi 1
+-j=1:apakah vektor[1](1)>key(3)?tidak.
+- loop while langsung berhenti
+- sisipkan vektor[j+1](yaitu vektor[2])=key(3)
+hasil iterasi 4 [1,3,5,7,9]
+```
+
+# merge sort (Min-Max)
+```
+vektor awal: [7,5,1,9,3](n=5)
+Tahap 1: Divide (Memecah)
+Proses ini terjadi top-down hingga base case (1 elemen).
+1.[7,5,1,9,3] (n=5) → tengah = floor(5/2) = 2
+2. Pecah jadi kiri = [7, 5] dan kanan = [1, 9, 3]
+3.[7,5] (n=2) → tengah =1
+4. Pecah jadi kiri = [7] (Base case) dan kanan = [5] (Base case)
+5.[1,9,3] (n=3) → tengah =1
+6. Pecah jadi kiri = [1] (Base case) dan kanan = [9,3]
+7.[9,3] (n=2) → tengah =1
+8. Pecah jadi kiri = (9] (Base case) dan kanan = [3] (Base case)
+Tahap 2: Combine (Menggabungkan)
+Proses ini terjadi bottom-up, mengurutkan sambil menggabung.
+1. Combine [7] dan [5]:
+  * Bandingkan 7 dan 5. 5 lebih kecil.
+* Hasil: [5,7]
+2. Combine [9] dan [3]:
+  * Bandingkan 9 dan 3. 3 lebih kecil.
+* Hasil: [3,9]
+3. Combine [1] dan [3,9):
+  * Bandingkan 1 dan 3. 1 lebih kecil.
+* Array [1] habis. Masukkan sisa [3, 9].
+* Hasil: [1,3,9]
+4. Combine [5,7] dan [1,3,9] (Langkah Final):
+  * Bandingkan 5 dan 1.1 lebih kecil. → Hasil: [1]
+* Bandingkan 5 dan 3.3 lebih kecil. → Hasil: [1,3]
+* Bandingkan 5 dan 9.5 lebih kecil. → Hasil: [1,3,5]
+* Bandingkan 7 dan 9.7 lebih kecil. → Hasil: [1,3,5,7]
+* Array [5,7] habis. Masukkan sisa [9].
+* Hasil: [1,3,5,7,9]
+Hasil Akhir (Terurut): [1,3,5,7,9]
+```
+
+# quick sort (Min-Max)
+```
+Vektor Awal: (7,5, 1, 9,3]
+Kita akan menelusuri panggilan rekursifnya. Q(...) adalah panggilan fungsi quick sort.
+1. Panggil Q([7,5, 1, 9, 3])
+* Pivot: 3 (elemen terakhir).
+* Partisi:
+  * 7 >= 3 → kanan = [7]
+* 5>= 3 →kanan=[7,5]
+* 1 <3 → kiri = (1]
+* 9 >= 3 → kanan = [7,5,9]
+* Struktur Rekursif: c( Q([1]), 3, Q([7,5, 9]))
+2. Panggil Q([1]) (dari kiri)
+* Base Case (n=1). Kembalikan [1].
+3. Panggil Q([7, 5, 9]) (dari kanan)
+* Pivot: 9.
+* Partisi:
+  * 7 <9 → kiri = [7]
+* 5<9 → kiri = [7,5]
+* Struktur Rekursif: c( Q([7,5]), 9, Q(() )
+                        4. Panggil Q(I) (dari kanan)
+                        * Base Case (n=0). Kembalikan [].
+                        5. Panggil Q([7,5]) (dari kiri)
+                        * Pivot: 5.
+                        * Partisi:
+                          * 7 >= 5 → kanan =[7]
+                        * Struktur Rekursif: c( Q(L), 5, Q([7]))
+                        6. Panggil Q(C)) (darikiri)
+* Base Case (n=0). Kembalikan [].
+7. Panggil Q([7]) (dari kanan)
+* Base Case (n=1). Kembalikan [7].
+> Sekarang, proses Combine (menggabungkan dari bawah ke atas):
+  * Combine Level 5: c([], 5, [7]) → menghasilkan [5,7]
+* Combine Level 3: c([5, 7], 9, []) → menghasilkan [5,7,9]
+* Combine Level 1: c([1],3,[5,7,9]) → menghasilkan[1,3,5,7,9]
+Hasil Akhir (Terurut): [1,3,5,7,9]
+```
+
+# radix sort (Min-Max)
+```
+Vektor Awal: [170, 45, 75, 90, 802, 24, 2, 66]
+> Iterasi 1: Sortir berdasarkan Digit Satuan (eksponen 1)
+- lihat digit terakhirnya: ...0, ..5. ..5...0,..2,...4...2,...6]
+- lakukan Counting Sort berdasarkan digit-digit ini:
+  -0 (dari 170,90)
+-2 (dari 802,2)
+-4 (dari 24)
+-5 (dari 45,75)
+-6 (dari 66)
+Hasil Iterasi 1: [170, 90, 802, 2, 24, 45, 75, 66](Penting:802 tetap di depan 2 karena 170 di depan 90 - ini disebut stabil)
+> Iterasi 2: Sortir berdasarkan Digit Puluhan (eksponen 10)
+- lihat digit tengahnya:(.T...9.,.....,..2..4...7.....6]
+- lakukan Counting Sort pada array hasil
+iterasi 1 berdasarkan digit puluhan:
+  0 (dari 802,02)
+2 (dari 24)
+4 (dari 45)
+6 (dari 66)
+7 (dari 170, 75)
+9 (dari 90)
+Hasil Iterasi 2: [802, 2, 24, 45, 66, 170, 75, 90](Lihat, 802 dan 2 (002) sekarang di depan. 170 di depan 75 karena urutan di iterasi 1)
+> Iterasi 3: Sortir berdasarkan Digit Ratusan (eksponen 100)
+- lihat digit pertamanya:[8...........O.....,...1....0.....0.]
+- lakukan Counting Sort pada array hasil iterasi 2
+berdasarkan digit ratusan:
+  -0 (dari 002, 024, 045, 066, 075, 090)
+-1 (dari 170)
+-8 (dari 802)
+Hasil Iterasi 3: [2.24. 45. 66. 75. 90. 170, 802]
+Hasil Akhir (Terurut): [2, 24, 45, 66, 75, 90, 170, 802]
+```
+
+# counting sort (Min-Max)
+
+```
+Vektor Awal: [5, 3, 1, 5, 3, 1, 1] (n = 7)
+1. Cari Nilai Maksimal: max_val = 5.
+2. Buat Array Hitung: Buat count dengan 5 "ember" (indeks 1 s/d 5). count = [0, 0, 0, 0, 0]
+3. Hitung Frekuensi: Iterasi melalui [5, 3, 1, 5, 3, 1, 1).
+* vektor[1] adalah 5 → count[5] jadi 1.
+* vektor[2] adalah 3 → count[3] jadi 1.
+* vektor[3] adalah 1 → count[1] jadi 1.
+* vektor[4] adalah 5 → count[5] jadi 2.
+* vektor[5] adalah 3 → count[3] jadi 2.
+* vektor[6] adalah 1 → count[1] jadi 2.
+* vektor[7] adalah 1 → count[1] jadi 3.
+* Hasil count: [3, 0, 2, 0, 2] (Artinya: ada tiga '1', nol '2', dua '3', nol '4', dua '5')
+4. Susun Ulang Array: Buat hasil = 0].
+* i= 1: count[1] adalah 3.
+* Masukkan '1'. hasil = [1]. count[1] jadi 2.
+* Masukkan '1'. hasil = [1, 1]. count[1] jadi 1.
+* Masukkan '1'. hasil = [1, 1, 1]. count[1] jadi 0.
+* i= 2: count 2] adalah 0. Lewati.
+* i= 3: count[3] adalah 2.
+* Masukkan '3'. hasil = [1, 1, 1, 3]. count[3] jadi 1.
+* Masukkan '3'. hasil = [1, 1, 1, 3, 3]. count[3] jadi 0.
+* i= 4: count[4] adalah 0. Lewati.
+* i= 5: count[5] adalah 2.
+* Masukkan '5'. hasil = [1, 1, 1, 3, 3, 5]. count[5] jadi 1.
+* Masukkan '5'. hasil = [1, 1, 1, 3, 3, 5, 5]. count[5] jadi 0.
+Hasil Akhir (Terurut): [1, 1, 1, 3, 3, 5, 5]
+```
+
+
+# PERTEMUAN 11 METODE SEARCHING
+
+Metode searching adalah Kumpulan langkah sistematis yang dirancang untuk menemukan keberadaan ataulokasi suatu data spesifik (disebut target atau key) di dalam sekumpulan data.
+Metode searching terbagi menjadi 2, yaitu:
+
+- unsorted search: Algoritma yang mencari data tanpa memerlukan data dalam kondisi terurut. Algoritma ini memeriksa data satu per satu.
+
+- Sorted search: Algoritma yang memanfaatkan struktur data yang sudah terurut untuk menemukan data dengan jauh lebih efisien, seringkali dengan membuang sebagian besar data di setiap langkah
+
+# Unsorted search dibagi menjadi 3:
+
+- 1. Sequential Search: Mencari elemen dengan memeriksa setiap data secara berurutan, satu per satu, dari awal hingga akhir.
+
+- 2. Hash Table Search: Menggunakan fungsi hash untuk menghitung indeks (posisi) data secara langsung,memungkinkan pencarian instan tanpa perbandingan.
+
+- 3. Binary Search Tree (BST) search: Mencari data dengan menelusuri struktur pohon, bergerak ke cabang kiri (nilai lebih kecil) atau kanan (nilai lebih besar) secara rekursif.
+
+# 1. Sequential search
+```
+Contoh 1: Target Ditemukan (Data Unik)
+Vektor Awal: [7, 5, 1, 9, 3] (n = 5)
+Target Dicari: 1
+Langkah-langkah Iterasi:
+  i = 1: Cek vektor[1]. Apakah 7 == 1? Tidak.
+Lanjut.
+i = 2: Cek vektor[2]. Apakah 5 == 1? Tidak.
+Lanjut.
+i = 3: Cek vektor[3]. Apakah 1 == 1? Ya.
+DITEMUKAN di indeks 3. Proses pencarian
+berhenti.
+
+Contoh 2: Target Ditemukan (Data Duplikat)
+Vektor Awal: [7, 5, 9, 3, 5, 2] (n = 6)
+Target Dicari: 5
+Langkah-langkah Iterasi:
+  1.
+i = 1: Cek vektor[1]. Apakah 7 == 5? Tidak.
+Lanjut.
+2.
+i = 2: Cek vektor[2]. Apakah 5 == 5? Ya.
+3.
+DITEMUKAN di indeks 2. Proses pencarian
+berhenti.
+``` 
+
+# 2. Hash Table search
+```
+Contoh 1: Pencarian Ideal (Tanpa Tabrakan)
+Vektor Awal: [7, 5, 1, 9, 3]
+Fungsi Hash (Contoh): Gunakan fungsi sederhana indeks = (nilai % 5) + 1. (Modulo 5, lalu +1 agar 1-based).
+Proses Membangun Tabel Hash (Setup):
+  7: (7 % 5) + 1 = 2 + 1 = 3. Simpan 7 di bucket [3].
+5: (5 % 5) + 1 = 0 + 1 = 1. Simpan 5 di bucket [1].
+1: (1 % 5) + 1 = 1 + 1 = 2. Simpan 1 di bucket [2].
+9: (9 % 5) + 1 = 4 + 1 = 5. Simpan 9 di bucket [5].
+3: (3 % 5) + 1 = 3 + 1 = 4. Simpan 3 di bucket [4].
+Tabel Hash Final: [ (1): [5], (2): [1], (3): [7], (4): [3], (5): [9] ]
+Target Dicari: 9
+Iterasi Pencarian:
+  Hitung hash dari Target 9: indeks = (9 % 5) + 1 = 5.
+Lompat langsung ke bucket indeks 5.
+Periksa isi bucket [5]. Ditemukan 9.
+DITEMUKAN. (Pencarian selesai dalam 1 langkah).
+
+Contoh 2: Pencarian dengan Tabrakan (Collision)
+Vektor Awal: [7, 5, 1, 9, 3, *14*]
+Fungsi Hash: indeks = (nilai % 5) + 1
+Proses Membangun Tabel Hash:
+  ... (Sama seperti di atas)
+14: (14 % 5) + 1 = 4 + 1 = 5.
+Bucket [5] sudah berisi 9. Kita tambahkan 14 ke bucket
+y
+ang sama (disebut chaining).
+Tabel Hash Final: [ (1): [5], (2): [1], (3): [7], (4): [3], (5): [9,14] ]
+Target Dicari: 14
+Iterasi Pencarian:
+  Hitung hash dari Target 14: indeks = (14 % 5) + 1 = 5.
+Lompat langsung ke bucket indeks 5.
+Isi bucket [5] adalah [9, 14]. Kita lakukan Sequential Search di dalam
+b
+ucket ini.
+Cek elemen 1 di bucket: Apakah 9 == 14? Tidak.
+Cek elemen 2 di bucket: Apakah 14 == 14? Ya.
+DITEMUKAN.
+```
+
+# 3. Binary Search Tree (BST) search
+```
+Vektor Input: [8, 10, 3, 14, 6, 1, 7, 4]
+Target Dicari: 7
+Iterasi Pencarian (Menelusuri Jalur):
+  1.Mulai dari Akar (Root). Nilai 8.
+2.Bandingkan: Target (7) < 8? Ya. Pindah KIRI ke simpul 3.
+3.Bandingkan: Target (7) > 3? Ya. Pindah KANAN ke simpul 6.
+4.Bandingkan: Target (7) > 6? Ya. Pindah KANAN ke simpul 7.
+5.Bandingkan: Target (7) == 7? Ya.
+6.DITEMUKAN.
+```
+
+# SORTED SEARCH DIBAGI MENJADI 3:
+
+- 1. Binary Search: Mencari elemen pada data terurut dengan membandingkan target ke nilai tengah, lalu membuang setengah bagian pencarian secara berulang.
+
+- 2. Interpolation search: Menebak posisi elemen secara cerdas (interpolasi) pada data terurut, dengan asumsi data terdistribusi seragam (bukan sekadar membelah di tengah).
+
+- 3. Jump Search: Mencari pada data terurut dengan "melompat" maju dalam interval tetap (blok), lalu melakukan pencarian berurutan di dalam blok yang relevan.
+
+
+# 1.Binary search
+```
+Contoh 1:
+  Vektor Awal (HARUS TERURUT):
+  [1, 3, 5, 7, 9, 11, 13] (n = 7)
+Target Dicari: 3
+Gunakan tiga penunjuk (pointer): kiri, kanan, dan tengah.
+Iterasi 1:
+  kiri = 1, kanan = 7
+tengah = floor((1 + 7) / 2) = 4
+Cek vektor[tengah] →
+vektor[4] adalah 7.
+Perbandingan: Target (3) < (7). Target pasti ada di
+kiri.
+Buang bagian kanan. Atur ulang batas: kanan =
+  tengah - 1 (yaitu 4 - 1 = 3).
+Ruang Pencarian Baru: [1, 3, 5] (Indeks 1 s/d 3)
+Iterasi 2:
+  kiri = 1, kanan = 3
+tengah = floor((1 + 3) / 2) = 2
+Cek vektor[tengah] →
+vektor[2] adalah 3.
+Perbandingan: Target (3) == (3).
+DITEMUKAN di indeks 2. Proses pencarian berhenti.
+```
+
+
+# 2.Interpolation search
+```
+Contoh 1: Pencarian Ideal (Data Seragam)
+Vektor Awal: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+(n = 10)
+Target Dicari: 90
+Iterasi 1:
+  L=1 (nilai 10), R=10 (nilai 100).
+Formula (1-based):
+  pos = L + floor( ((Target - V[L]) * (R - L)) / (V[R] - V[L]) )
+pos= 1 + floor( ((90 - 10) * (10 - 1)) / (100 - 10) )
+pos = 1 + floor( (80 * 9) / 90 )
+pos = 1 + floor( 720 / 90 )
+pos = 1 + 8 = 9.
+Cekvektor[pos] →vektor[9] adalah 90.
+DITEMUKAN di indeks 9. (Hanya 1 iterasi).
+
+Pencarian Kasus Buruk (Data Tidak Seragam)
+Vektor Awal: [1, 2, 3, 100, 101, 102] (n = 6)
+Target Dicari: 3
+Iterasi 1:
+  L=1 (nilai 1), R=6 (nilai 102).
+pos= 1 + floor( ((3 - 1) * (6 - 1)) / (102 - 1) )
+pos = 1 + floor( (2 * 5) / 101 )
+pos = 1 + floor( 10 / 101 )
+pos = 1 + 0 = 1.
+Cek vektor[1] (nilai 1). Target (3) > 1. Ruang
+pencarian baru: L = pos + 1 = 2.
+Iterasi 2:
+  L=2 (nilai 2), R=6 (nilai 102).
+pos
+= 2 + floor( ((3 - 2) * (6 - 2)) / (102 - 2) )
+pos = 2 + floor( (1 * 4) / 100 )
+pos = 2 + 0 = 2.
+Cek vektor[2] (nilai 2). Target (3) > 2. Ruang pencarian baru: L = pos + 1 = 3.
+Iterasi 3:
+  L=3 (nilai 3), R=6 (nilai 102).
+pos = 3 + floor( ((3 - 3) * (6 - 3)) / (102 - 3) )
+pos = 3 + 0 = 3.
+Cek vektor[3] (nilai 3).
+DITEMUKAN di indeks 3. (Membutuhkan 3 langkah, O(n), karena data tidak seragam).
+```
+
+
+# 3.Jump search
+```
+Contoh 1: Target Ditemukan
+Vektor Awal: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31] (n = 16)
+Target Dicari: 27
+Setup: Ukuran lompatan m = sqrt{16} = 4.
+Iterasi 1 (Lompatan):
+  Cek indeks 1 * 4 = 4. vektor[4] adalah 7.
+Target (27) > 7. Lanjut lompat.
+Iterasi 2 (Lompatan):
+  Cek indeks 2 * 4 = 8. vektor[8] adalah 15.
+Target (27) > 15. Lanjut lompat.
+Iterasi 3 (Lompatan):
+  Cek indeks 3 * 4 = 12. vektor[12] adalah 23.
+Target (27) > 23. Lanjut lompat.
+Iterasi 4 (Lompatan):
+  Cek indeks 4 * 4 = 16. vektor[16] adalah 31.
+Target (27) < 31. STOP.
+Target, jika ada, pasti berada di antara indeks 12 (lompatan sebelumnya) dan indeks 16.
+Iterasi 5 (Sequential Search):
+  Lakukan Sequential Search di blok terakhir (mulai dari indeks 12 + 1 =13):
+  Cek vektor[13]: 25 == 27? Tidak.
+Cek vektor[14]: 27 == 27? Ya.
+DITEMUKAN di indeks 14.
+```
+
+
+# PERTEMUAN 12 METODE GREEDY
+
+Pengertian: Algoritma Greedy adalah metode pemecahan masalah yang mengikuti heuristik pemecahan masalah dengan membuat pilihan lokal yang optimal pada setiap tahap,
+dengan harapan bahwa pilihan-pilihan tersebut akan mengarah pada solusi globalyang optimal.
+ Sesuai namanya (Greedy = Tamak/Rakus), algoritma ini selalu ingin mengambil"keuntungan terbesar" yang ada di depan mata saat ini juga, 
+tanpa mempedulikan konsekuensi jangka panjang atau langkah berikutnya.
+            
+- Prinsip kerja
+```
+1.Ia mengambil keputusan yang terlihat terbaik saat ini.
+               2.Keputusan yang sudah diambil tidak bisa diubah (tidak ada langkahmundur/backtracking).
+               3.Langkah ini diulang sampai masalah selesai.
+```
+
+- Analogi metode Greedy:
+```
+  Misalkan Anda adalah kasir yang harus memberikan kembalian Rp7.000menggunakan koin/uang pecahan yang tersedia: Rp5.000, Rp2.000, Rp1.000,Rp500.
+Langkah Greedy: Anda pasti akan mengambil pecahan terbesar yang muatterlebih dahulu.
+a.Ambil Rp5.000 (Sisa Rp2.000).
+b.Ambil Rp2.000 (Sisa 0).Anda tidak akan memberikan 7 lembar Rp1.000, meskipun itu mungkin, 
+karenaitu tidak efisien (tidak optimal secara jumlah lembar).
+```
+
+# Greedy: Optimal Storage on Tapes
+
+Latar Belakang: Di era modern, kita terbiasa dengan Random Access Memory (RAM) atau SSD dimana mengakses data di posisi manapun membutuhkan waktu yang hampir sama(instan). 
+Namun, dalam sejarah komputasi (dan arsip data besar), kita menggunakan Media Akses Sekuensial seperti pita magnetik (magnetic tapes).
+
+- Konsep Kunci: Sequential Access
+```
+Bayangkan sebuah kaset lagu lama. Jika Anda ingin mendengarkan lagu ke-5,Anda terpaksa harus memutar (melewati) lagu ke-1, ke-2, ke-3, dan ke-4 terlebih dahulu. Anda tidak bisa langsung "melompat".
+Implikasi: Urutan penyimpanan sangat mempengaruhi seberapa lama kita harus menunggu untuk mendapatkan data.
+Masalah: Jika kita menaruh data yang sering diakses atau data yang pendek dibagian paling belakang, maka "kepala pita" (tape head) harus bekerja keras memutar gulungan pita yang panjang setiap kali mengaksesnya.
+```
+
+- Tujuan Optimasi: 
+```
+Bukan sekadar "menyimpan data", melainkan meminimalkan WaktuAkses Rata-Rata atau Mean Retrieval Time (MRT).
+Kita ingin mencari permutasi (urutan) penyimpanan i(1), i(2), ... , i(n) sedemikian rupa sehingga rata-rata waktu tunggu pengguna menjadi sekecil mungkin.
+```
+
+# Logika Greedy pada Optimal Storage on Tapes 
+
+- Masalah:
+```
+- Kita ingin mengurangi rata-rata waktu tunggu.
+         - Sifat "Serakah"-nya: Kita berpikir: "Saya tidak peduli dengan file-file besar nanti.Pokoknya, saya ingin menyelesaikan satu file secepat mungkin sekarang juga agar antrean di belakangnya tidak menunggu lama."
+         -Keputusan Greedy: Pilih file dengan durasi TERPENDEK untuk ditaruh paling depan.
+         -Kenapa ini Greedy? Karena kita "serakah" terhadap waktu. Kita ingin"membuang" beban antrean sesegera mungkin.
+```
+
+- Analogi Kasir: 
+```
+Bayangkan ada 2 orang di kasir. Orang A bawa 1 permen, Orang Bbawa 1 troli penuh belanjaan.
+Greedy: Kasir melayani Orang A dulu (yang pendek). Selesai dalam 10 detik.Orang B menunggu 10 detik + waktunya sendiri. Rata-rata tunggu sangat sebentar.
+Non-Greedy: Kasir melayani Orang B dulu. Orang A harus menunggu 10 menithanya untuk bayar permen. Rata-rata tunggu jadi lama sekali.
+Greedy tidak bekerja secara real time tapi secara Bacth.
+```
+
+# Studi Kasus
+```
+Terdapat 3 program dengan panjang masing-masing:
+  -Program A: 5 menit
+  -Program B: 10 menit
+  -Program C: 3 menit
+Skenario 1: Urutan Sembarang (A, B, C)Urutan penyimpanan: [A] -> [B] -> [C]
+1.Akses A: 5 menit.
+2.Akses B: 5 (A) + 10 (B) = 15 menit.
+3.Akses C: 5 (A) + 10 (B) + 3 (C) = 18 menit.
+-Total Waktu: 5 + 15 + 18 = 38 menit.
+-MRT: 38 / 3 = 12.66 menit.
+
+Skenario 2: Pendekatan Greedy (C, A, B)Urutan penyimpanan (Terurut Kecil ke Besar): [C] -> [A] -> [B]
+1.Akses C: 3 menit.
+2.Akses A: 3 (C) + 5 (A) = 8 menit.
+3.Akses B: 3 (C) + 5 (A) + 10 (B) = 18 menit.
+-Total Waktu: 3 + 8 + 18 = 29 menit.
+-MRT: 29 / 3 = 9.66 menit.
+```
+
+# Greedy: Knapsack Problem
+- Latar Belakang Masalah: Ini adalah salah satu masalah optimasi paling terkenal dalam ilmu komputer dan matematika. Masalah ini merepresentasikan situasi Alokasi Sumber Daya Terbatas. Bayangkan Anda memiliki wadah dengan kapasitas terbatas, dan banyak pilihan objek untuk dimasukkan.Setiap objek punya "biaya" (berat/ruang) dan"keuntungan" (nilai/harga). 
+
+- Konsep Kunci :
+```
+1.0/1 Knapsack (Biner):
+  -Barang tidak bisa dibagi. Anda harus mengambilnya utuh (1) atau tidaksama sekali (0).
+  -Contoh: Laptop, Emas Batangan, Lukisan.
+  -Solusi: Algoritma Greedy sering gagal di sini. Harus menggunakan DynamicProgramming.
+2.Fractional Knapsack (Pecahan):
+  -Barang bisa dibagi/dipecah. Anda boleh mengambil sebagian saja (misal:0.5 kg).
+  -Contoh: Gula pasir, Tepung, Biji kopi, Emas bubuk.
+  -Solusi: Algoritma Greedy sangat efektif dan optimal untuk kasus ini.
+
+Tujuan Optimasi: Tujuannya adalah Maksimasi Profit (Keuntungan).Kita ingin mengisi ransel sedemikian rupa sehingga total nilai (p) setinggi mungkin,
+                 dengan syarat total berat (w) tidak melebihi kapasitas (M).
+Logika Greedy pada Fractional Knapsack
+Dalam Fractional Knapsack, strategi Greedy bukan melihat "Mana yang palingmahal?" atau "Mana yang paling ringan?", tetapi "Mana yang paling berharga perkilogram-nya?".
+Ini disebut Densitas Nilai:
+  -Densitas = Profit / Weight
+  Barang dengan densitas tertinggi adalah prioritas utama untuk dimasukkan kedalam ransel.
+```
+
+- Logika Greedy pada Fractional Knapsack
+```
+    -Masalah: Kita ingin keuntungan maksimal dengan ruang terbatas.
+    -Sifat "Serakah"-nya: Kita berpikir: "Saya tidak peduli total beratnya berapa,pokoknya saya ingin setiap kilogram yang masuk ke tas saya memberikan nilai rupiah tertinggi.
+    -"Keputusan Greedy: Pilih barang dengan DENSITAS TERTINGGI (Nilai/Berat)untuk diambil duluan.
+    -Kenapa ini Greedy? Karena kita "serakah" terhadap nilai per unit. 
+  
+  Analogi: "Makan di Restoran All You Can Eat (AYCE) Sultan"
+  Bayangkan Anda ditraktir makan di restoran hotel bintang 5 yang sangat mewah.
+  Namun, ada satu kendala: Perut Anda kapasitasnya terbatas (misalnya cuma muat500 gram makanan).
+  Di meja prasmanan tersaji:
+    1.Nasi Goreng: (Berat, mengenyangkan, tapi murah).
+    2.Air Mineral: (Berat, tidak ada harganya).
+    3.Daging Wagyu A5: (Beratnya sama, tapi sangat mahal/enak).
+    4.Lobster: (Mahal dan enak).
+```
+
+- Greedy yang Benar (Knapsack Logic):
+```
+Anda berpikir: "Setiap sendok yang masuk ke mulut saya harus memberikan kenikmatan (nilai) tertinggi."
+    -Anda akan mengabaikan nasi goreng dan air.
+    -Anda akan menyerbu Wagyu dan Lobster terlebih dahulu.
+    Kenapa? Karena Wagyu memiliki Densitas Kenikmatan Tertinggi. Walaupun cuma makan sepotong kecil (sebagian/fractional), nilainya jauh lebih tinggi daripada sepiring nasi.Di restoran AYCE, Anda tidak harus memakan satu ekor sapi utuh. 
+    Anda bisa mengambil seiris (sebagian) daging Wagyu → inilah sisi Fractional nya.
+```
+
+# Study Cases :
+```
+Kapasitas Ransel (M): 20 kg
+    Daftar Barang:
+  Barang    Berat(w)    Nilai(p)
+    A         10kg        60
+    B         20kg        100
+    C         30kg        120
+    
+    Langkah Penyelesaian:
+    1. Hitung Densitas (p/w)
+    -Barang A: 60 / 10 = 6 (Peringkat 1)
+    -Barang B: 100 / 20 = 5 (Peringkat 2)
+    -Barang C: 120 / 30 = 4 (Peringkat 3) 
+    
+    2. Proses Seleksi (Iterasi):
+    *Iterasi 1 (Barang A):
+      -Berat 10 kg <= Sisa Kapasitas 20 kg.
+      -Keputusan: Ambil seluruh Barang A.
+      -Sisa Kapasitas: 20 - 10 = 10 kg.
+      -Nilai: 60.
+    
+    *Iterasi 2 (Barang B):
+      -Berat 20 kg > Sisa Kapasitas 10 kg.
+      -Keputusan: Ambil sebagian Barang B sebesar sisa kapasitas.
+      -Fraksi yang diambil: 10 (sisa) / 20 (berat asli)
+      -Nilai dari fraksi: 0.5 x 100 = 50.
+      -Sisa Kapasitas: 0 kg (Penuh).
+    
+    3. Hasil Akhir
+    Total Nilai Maksimum = 60 (Barang A)+50 *Barang B)=110
+```
